@@ -1,0 +1,27 @@
+Topics:
+ - var
+ - val
+   - Primitives: Int, Float
+   - Tuples
+   - Collections: List, Map
+ - while
+ - for
+ - lambda
+ - foreach, map, flatMap, filter, fold
+
+=> 01 + 02 Imperative vs Function Collection Processing
+
+ - def
+   - type inference
+
+=> 03 Scala type system 
+
+ - class, object
+ - trait
+ - case class
+ - case object
+
+=> 04 Interpretor example
+
+
+

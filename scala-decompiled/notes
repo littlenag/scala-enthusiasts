@@ -1,0 +1,61 @@
+constructions to look at:
+ + val/var
+ + def
+ + val override of def
+ + lazy
+ + class
+ + case class
+ + lambda
+ + scala vs java namespaces
+ + scala primary constructor vs java constructor
+ + curried param lists
+ + class extends trait
+ + vs with trait
+ - vs stacked traits
+ + plain object
+ - object with trait
+ - object extends class
+ - pattern matching
+ - for comprehension
+ - implicits
+ - enum
+ - type alias
+ - type member
+
+ - type constraints
+   - invarient, covarient, contravarient
+
+---
+
+jd-gui
+ - Java Decompiler
+ - http://jd.benow.ca/
+
+bcv
+ - Byte Code Viewer
+ - https://bytecodeviewer.com/
+
+---
+
+scala constructor rules
+ - in java, you have to call super first, means you can't use virtual functions as part of construction!
+
+---
+
+@ScalaSignature
+
+ http://www.scala-lang.org/old/node/6634.html
+
+You need a ScalaSignatures in a class to:
+1. compile against it
+2. use Scala reflection (Java reflection obviously doesn't need it).
+
+not sure how TASTY is being implemented
+
+---
+
+symbols that are vals, vars, and defs all inhabit the same namespace
+ - very different than Java, where fields are separate from methods
+
+---
+
