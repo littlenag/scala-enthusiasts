@@ -1,4 +1,6 @@
 constructions to look at:
+
+In part 1:
  + val/var
  + def
  + val override of def
@@ -13,12 +15,30 @@ constructions to look at:
  + vs with trait
  - vs stacked traits
  + plain object
+ + default parameters
+
+In part 2:
+ - class
+ - trait
+ - stackable trait
+ - trait extends trait
+ X trait extends interface
+ - trait extends class
  - object with trait
  - object extends class
+ - enum, and alternatives:
+   - https://github.com/lloydmeta/enumeratum
  - pattern matching
  - for comprehension
  - implicits
- - enum
+   - regular type param
+   - extension method
+   - type conversion
+   - type class
+   - hlist
+   - map over hlist
+   - labelled generic
+
  - type alias
  - type member
 
@@ -58,4 +78,3 @@ symbols that are vals, vars, and defs all inhabit the same namespace
  - very different than Java, where fields are separate from methods
 
 ---
-

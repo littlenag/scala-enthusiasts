@@ -1,27 +1,64 @@
+Elements:
+- pure functions
+- first-class functions
+- function composition
+- higher-order functions
+- lazy evaluation
+- recursion
+- pattern matching
+- program soundness
+- complex types
+- immutable algebraic data types
+
 Topics:
+
+object-functional
+
+=> 01 + 02 Imperative vs Function Collection Processing
  - var
  - val
    - Primitives: Int, Float
    - Tuples
    - Collections: List, Map
+ - lazy
  - while
  - for
  - lambda
  - foreach, map, flatMap, filter, fold
-
-=> 01 + 02 Imperative vs Function Collection Processing
-
  - def
    - type inference
 
-=> 03 Scala type system 
+=> 03 Scala REPL
 
- - class, object
+ - type inference limits
+ - JVM limits
+
+=> 04 Scala object/type system
+
+ Interpreter example
+ Scala is both more OO and more functional than Java!
+
+ - class
  - trait
+ - object
  - case class
  - case object
 
-=> 04 Interpretor example
+=> 05 Type classes
 
+ - implicits
+ - modelling type classes
 
+=> 06 Scalaz
 
+more useful for its type classes & functional data structures
+
+Applicative, Functor, Monad
+
+supports lots of haskell operators, |@|, <*>
+
+http://rea.tech/the-worst-thing-in-our-scala-code-futures/
+http://www.slideshare.net/kenbot/running-free-with-the-monads
+http://engineering.sharethrough.com/blog/2016/07/28/monads-part-2-the-free-monad/
+https://www.youtube.com/watch?v=rK53C-xyPWw
+http://underscore.io/blog/posts/2015/04/14/free-monads-are-simple.html

@@ -1,4 +1,4 @@
-def map_for_loop[A,B](f : A => B)(l : List[A]) : List[B] = {
+def map_for_loop[A,B](l : List[A])(f : A => B) : List[B] = {
   var nl : List[B] = Nil
 
   for (el <- l) {
@@ -8,19 +8,19 @@ def map_for_loop[A,B](f : A => B)(l : List[A]) : List[B] = {
   nl
 }
 
-def map_recursive_match[A,B](f : A => B)(l : List[A]) : List[B] = l match {
-  case h :: t => f(h) :: map_recursive_match(f)(t)
+def map_recursive_match[A,B](l : List[A])(f : A => B) : List[B] = l match {
+  case h :: t => f(h) :: map_recursive_match(t)(f)
   case Nil => Nil
 }
 
-def map_recursive_if[A,B](f : A => B)(l : List[A]) : List[B] = {
+def map_recursive_if[A,B](l : List[A])(f : A => B) : List[B] = {
   if (l.isEmpty)
     Nil
   else
-    f(l.head) :: map_recursive_if(f)(l.tail)
+    f(l.head) :: map_recursive_if(l.tail)(f)
 }
 
-def map_tailrec[A,B](f : A => B)(l : List[A]) : List[B] = {
+def map_tailrec[A,B](l : List[A])(f : A => B) : List[B] = {
   @scala.annotation.tailrec
   def helper(done:List[B], todo:List[A]) : List[B] = {
     if (todo.isEmpty)
@@ -31,13 +31,13 @@ def map_tailrec[A,B](f : A => B)(l : List[A]) : List[B] = {
   helper(Nil, l)
 }
 
-def map_for_comprehension[A,B](f : A => B)(l : List[A]) =
+def map_for_comprehension[A,B](l : List[A])(f : A => B) =
   for (a <- l) yield f(a)
 
-def map_method_explicit[A,B](f : A => B)(l : List[A]) =
+def map_method_explicit[A,B](l : List[A])(f : A => B) =
   l.map(a => f(a))
 
-def map_method_concise[A,B](f : A => B)(l : List[A]) =
+def map_method_concise[A,B](l : List[A])(f : A => B) =
   l.map(f)
 
 // More with for
