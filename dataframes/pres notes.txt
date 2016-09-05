@@ -1,0 +1,19 @@
+https://saddle.github.io/doc/index.html
+
+cd ~/proj/workspace
+
+import org.saddle._
+import org.saddle.Vec
+import org.saddle.Series
+import org.saddle.ops._
+import org.saddle.ops.{GtOp, ScalarOp, LtOp, BinOp}
+import org.saddle.ops.BinOp._
+import org.saddle.io.{CsvSource, CsvParams, CsvParser, CsvFile}
+
+val df = CsvParser.parse(CsvFile("/Users/mkegel/dataframes/test-data.csv")).withColIndex(0).withRowIndex(1)
+
+df.col("lift")
+
+df.firstCol("lift")
+
+df.firstCol("lift").map(kv => (kv._1, kv._2.toFloat))
