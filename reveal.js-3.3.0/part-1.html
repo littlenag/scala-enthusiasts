@@ -1,0 +1,302 @@
+<html>
+<head>
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/black.css">
+  <link rel="stylesheet" href="custom.css">
+</head>
+<body>
+<script src="lib/js/head.min.js"></script>
+<div class="reveal">
+  <div class="slides">
+    <section>
+      <h2>Elements of Functional Programming in Scala</h2>
+
+      Mark Kegel
+    </section>
+
+    <section>
+      <h2>Prologue</h2>
+    </section>
+
+    <section>
+      <h3>What is Functional Programming?</h3>
+        <div class="fragment replaceafter">Monads?</div>
+        <div class="fragment replaceafter">Haskell?</div>
+    </section>
+
+    <section>
+      <h3>As viewed by a mathematician...</h3>
+      <div class="fragment current-visible dimafter">
+        <p>Functioning Programming is a
+        <p><b style="color: #cc0000">style</b>
+        <p>of programming that models
+        <p><b style="color: #cc0000">computation</b>
+        <p>as the evaluation of
+        <p><b style="color: #cc0000">mathematical functions.</b>
+      </div>
+
+      <div class="fragment">...by which we mean: FP := λ-calculus.</div>
+
+      <aside class="notes">
+        vs imperative, which is a set of instructions
+        vs OO, which think about objects and messages
+        vs logic, which are a set of goals
+      </aside>
+
+    </section>
+
+    <section>
+      <h2>Functions all the way down...</h2>
+      <ul>
+        <li class="fragment fade-up">every lambda term <em>t</em> is a function</li>
+        <li class="fragment fade-up">a variable, <em>x</em>, is itself a valid lambda term</li>
+        <li class="fragment fade-up">if <em>t</em> is a lambda term, and <em>x</em> is a variable, then <em>λx.t</em> is a lambda term (called a lambda abstraction);</li>
+        <li class="fragment fade-up">if <em>t</em> and <em>s</em> are lambda terms, then <em>(ts)</em> is a lambda term (called an application).</li>
+      </ul>
+
+      <p class="fragment">Um, shouldn't there be more?</p>
+      <p class="fragment">Nope. That's basically it.</p>
+
+      <aside class="notes">
+        lambda calculus is very simple, only anonymous functions, at the heart of Scala
+        notice: there is no data in λ-calculus
+
+        haskell/scala is built on the (typed) lambda calculus, probably worth a lecture at some point
+      </aside>
+    </section>
+
+    <section>
+      <h2>λ-calculus limitations</h2>
+
+      <p>FP breaks your brain the first time you use it.</p>
+
+      <p class="fragment dimafter">No named functions.</p>
+      <p class="fragment dimafter">No data.</p>
+      <p class="fragment dimafter">No variables.</p>
+      <p class="fragment dimafter">No control flow.</p>
+      <p class="fragment dimafter">No loops.</p>
+      <p class="fragment dimafter">No effects.</p>
+
+      <p class="fragment">Turing Complete!</p>
+
+      <aside class="notes">
+        kind of zen-like
+
+        Don't I need those things to write a program that does anything!?!
+
+        From https://en.wikipedia.org/wiki/Value-level_programming:
+
+        Lambda calculus-based languages (such as Lisp, ISWIM, and Scheme) are in actual practice value-level languages
+      </aside>
+    </section>
+
+    <section>
+
+      <p>Overcoming the λ-calculus limitations has produced a set of core Functional Programming <span class="fragment highlight-red">Concepts</span>. See Haskell, ML, and Scheme.
+
+      <p class="fragment">Functional Concepts can be imitated, leveraged, and/or duplicated more easily than the λ-calculus.
+
+      <p class="fragment">The Elements of Functional Programming are those Concepts applied.
+
+      <aside class="notes">
+        To be productive programmers want higher level notions like variables, control flow, etc.
+
+        Which concepts?
+
+        How faithful?
+
+        Haskell is pure. ML less so. Scala much less so.
+
+        How do the two paradigms compare in concept space?
+      </aside>
+
+    </section>
+
+    <section>
+      <p>Scala is hybrid language, incorporating core Concepts from:
+
+      <ul>
+      <li>λ-calculus</li>
+      <li>Functional Programming</li>
+      <li>Imperative Programming</li>
+      <li>Object-Oriented Programming</li>
+      <li>Generic Programming</li>
+      </ul>
+
+      <p class="fragment">Every programming language has to find a balance and compromise on features if it draws from multiple styles.
+
+      <p class="fragment">Scala trades-off in favor of Imperative and Object-Oriented Programming Concepts.
+
+      <aside class="notes">
+        compromise is a key word here
+
+        dotty compiler basically has λ-calculus as its core
+
+        desugars back out into jvm primitives in later phases
+
+        DOT and λ-calculus well linked
+
+        scala values seemless interop with java, is costly
+
+        if you can have both OO and FP semantics you'll get both, if not you'll get OO/IP
+      </aside>
+
+    </section>
+
+    <section data-markdown style="background-color: lightgray">
+      <script type="text/template">
+## Concepts through the looking glass
+
+| Functional                 | Imperative/OO             |
+| ----------                 | ------------------------- |
+| (Mathematical) Functions   | Sub-Routines              |
+| Purity                     | Side-Effects              |
+| Referential Transparency   | Dried Spaghetti           |
+| Binding                    | Assignment                |
+| Values                     | Variables                 |
+| Lazy Evaluation            | Strict Evaluation         |
+| Recursion                  | Loops                     |
+
+      </script>
+    </section>
+
+    <section>
+
+      <h2>Key FP Concepts</h2>
+
+      <ul>
+        <!-- Functions --->
+        <li>First-class Functions</li>  <!-- lambdas and closures -->
+        <li>Pure Functions</li>
+        <li>Higher-Order Functions</li> <!-- covers Function Composition -->
+        <li>Recursive Functions</li>    <!-- trampoline, tailrec -->
+        <li>Effect Control</li>         <!-- monads -->
+
+        <!-- Data -->
+        <li>Lazy Evaluation</li>
+        <li>Immutable Data</li>
+        <li>Algebraic Data Types</li>
+        <li>Pattern Matching</li>
+
+        <!-- Meta -->
+        <li>Expressive Type Systems</li>
+        <li>Program Soundness</li>
+      </ul>
+
+      <aside class="notes">
+        if you want to do FP perfectly, your language needs all of these
+
+        as defined by wikipedia
+
+        (closures vs lambdas)
+        Program soundness -> correctness
+        complex types -> type systems
+
+        all of these items has some first class representation in the language
+      </aside>
+
+    </section>
+
+    <section>
+      <h2>Imitation is the sincerest form of flattery</h2>
+
+      YOU: <em><br>There are too many differences, FP concepts don't align at all with Imperative code! The gap is too large.</em>
+
+      <p class="fragment">CLAIM: <br>Imperative code is conceptually close to Functional code.</p>
+      <p class="fragment">PROOF: <br>Code without variable re-assignment. Use/write only pure functions.</p>
+
+      <aside class="notes">
+        all about assignment, if you remove assignment, then the core of FP is what happens
+        no mutation, no side-effects (purity), referential transparency restored
+
+        pure = non-side-effecting & ref transparent
+
+        need compiler help for things like pure functions, help marking data immutable
+
+        Only goes so far: still have side-effecting functions like println.
+
+        Works in any language! Java, C++, JavaScript, Obj-C, PHP,...
+
+        copy more of the conceptual elements of Haskell/ML/Scheme, and get a better compiler, and you get a hybrid system!
+      </aside>
+    </section>
+
+    <section>
+      <h2>Elements of Functional Programming in Scala</h2>
+    </section>
+
+    <section>
+      We will be exploring each Scala FP Element, along with its:
+      <ul>
+        <li>conceptual representation,</li>
+        <li>JVM implementation,</li>
+        <li>inherent limitations.</li>
+      </ul>
+
+      <p>Keep in mind: the set of Concepts is not fixed, thus the set of Elements is not fixed.</p>
+
+    </section>
+
+    <section>
+      <h2>Part 1</h2>
+    </section>
+
+    <section>
+      <h2>Side-effects</h2>
+
+      Lots of different kinds of side-effects in Scala:
+      <ul>
+        <li>Variable Assignment</li>
+        <li>IO</li>
+        <li>Exceptions</li>
+      </ul>
+
+      You lose Referential Transparency.
+
+    </section>
+  </div>
+</div>
+<script src="js/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    mouseWheel: false,
+    //showNotes: SLConfig.deck.share_notes,
+    //slideNumber: SLConfig.deck.slide_number,
+
+    //autoSlide: SLConfig.deck.auto_slide_interval || 0,
+    autoSlideStoppable: true,
+
+    rollingLinks: false,
+    //center: SLConfig.deck.center || false,
+    //loop: SLConfig.deck.should_loop || false,
+    //rtl: SLConfig.deck.rtl || false,
+
+    //transition: SLConfig.deck.transition,
+    //backgroundTransition: SLConfig.deck.background_transition,
+    dependencies: [
+      // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+      { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+
+      // Interpret Markdown in <section> elements
+      { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+
+      // Syntax highlight for <code> elements
+      { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
+      // Zoom in and out with Alt+click
+      { src: 'plugin/zoom-js/zoom.js', async: true },
+
+      // Speaker notes
+      { src: 'plugin/notes/notes.js', async: true },
+
+      // MathJax
+      { src: 'plugin/math/math.js', async: true }
+    ]
+  });
+</script>
+</body>
+</html>

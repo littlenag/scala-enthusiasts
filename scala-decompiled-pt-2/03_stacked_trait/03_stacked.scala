@@ -12,6 +12,6 @@ class B extends T2 {
   override def foobar() = 42
 }
 
-class A extends B with T1 with T2 {
+class A extends B {
   override def foobar() = super.foobar()
 }

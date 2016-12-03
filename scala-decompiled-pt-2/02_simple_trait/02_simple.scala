@@ -3,5 +3,5 @@ trait T1 {
 }
 
 class B extends T1 {
-  override def foobar() = 42
+
 }

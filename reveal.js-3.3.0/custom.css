@@ -1,0 +1,37 @@
+.dimafter {
+ color: inherit;
+ text-shadow: inherit;
+ opacity: 1;
+ visibility: visible;
+}
+
+.reveal .slides section .fragment.visible:not(.current-fragment).dimafter {
+ color: inherit;
+ opacity: 0.1;
+ visibility: visible; 
+}
+
+.replaceafter {
+ color: inherit;
+ text-shadow: inherit;
+ opacity: 1;
+ visibility: visible;
+ position:relative;
+ display:block;
+}
+
+.reveal .slides section .fragment.visible:not(.current-fragment).replaceafter {
+ color: inherit;
+ opacity: 0;
+ visibility: hidden;
+ display: none;
+}
+
+.container {
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ -moz-transform: translateX(-50%) translateY(-50%);
+ -webkit-transform: translateX(-50%) translateY(-50%);
+ transform: translateX(-50%) translateY(-50%);
+}
