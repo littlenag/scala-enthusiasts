@@ -1,10 +1,11 @@
 <html>
 <head>
-  <link rel="stylesheet" href="css/reveal.css">
-  <link rel="stylesheet" href="css/theme/black.css">
+  <link rel="stylesheet" href="/reveal.js-3.3.0/css/reveal.css">
+  <link rel="stylesheet" href="/reveal.js-3.3.0/css/theme/black.css">
   <link rel="stylesheet" href="custom.css">
   <!-- For syntax highlighting -->
-  <link rel="stylesheet" href="lib/css/zenburn.css">
+  <link rel="stylesheet" href="/reveal.js-3.3.0/lib/css/zenburn.css">
+  <meta charset="UTF-8">
 </head>
 <body>
 <div class="reveal">
@@ -85,6 +86,8 @@
 
       <aside class="notes">
         kind of zen-like
+
+        all of these concepts can be encoded using the primitives the lambda calculus already has
 
         Don't I need those things to write a program that does anything!?!
 
@@ -328,20 +331,21 @@ val timesFour: Double => Double = mult(_, 4)
 
         Everything is an Expression
 
-        in lambda calc everything is a function, data, control, everything
-
-        but regular languages have built in abstraction, statements and expressions, for such things
-
-        yet scala has "everything is an expression"
-
         <pre><code class="scala" data-trim data-noescape>
 // if, for, match are all expressions
 val hexDigit = (x:Int) => if (x >= 10) x + 'A' - 10 else x + '0'
         </code></pre>
-        <aside class="notes">
-          Currying is the process of taking a function that accepts N arguments and turning it into a chained series of N functions each taking 1 argument.
 
-          Partial Application just fills in some of the N arguments, smaller arity function but not necessarily arity 1.
+        <aside class="notes">
+          Scala: Everything is an Expression
+
+          Lambda calc: everything is a function (data, control, everything)
+
+          Expressions are a superset of functions
+
+          but regular languages have built in abstraction, statements and expressions, for such things
+
+          yet scala has "everything is an expression"
         </aside>
       </section>
 
@@ -433,6 +437,9 @@ val pow = new Function2[Double,Double,Double] {
 
           http://blog.takipi.com/compiling-lambda-expressions-scala-vs-java-8/
 
+          Function0 to 22
+          Tuple0 to 22
+          Product0 to 22
         </aside>
       </section>
 
@@ -445,6 +452,9 @@ val pow = new Function2[Double,Double,Double] {
 // Or implicit parameters.
 def foo[T](a:T)(implicit ev:Show[T]) = ...
 
+// Can convert a method to a function
+val fooString = foo[String](_)
+
 // Can kind of work around
 class anonfunc[T] extends (T => String) {
   def apply(x:T)/*(implicit i:Int)*/ = x.toString.substring(0,4)
@@ -456,7 +466,7 @@ assert(f("generic") == "gene") // put gene back in the generic!
         <aside class="notes">
           we can't write our compose function as a function! it has to be a method
 
-          will be getting implicit function types
+          will be getting implicit function types, but will inherit another path
           http://www.scala-lang.org/blog/2016/12/07/implicit-function-types.html
 
           http://stackoverflow.com/questions/2554531/how-can-i-define-an-anonymous-generic-scala-function
@@ -503,30 +513,32 @@ java.lang.RuntimeException: terrible idea
         <h2>Pure Functions</h2>
 
         A Function is said to be pure if and only if:
+
         <ul>
           <li>its output depends only on the input, and</li>
           <li>there are no observable side-effects from evaluating the function.</li>
         </ul>
-
-        <p>You can have Pure Functions in Imperative languages.</p>
 
       </section>
 
       <section>
         <h2>Pure Functions</h2>
 
-        Pure Functions are ENTIRELY a programming convention in Scala.
+        <p>You can have Pure Functions in Imperative languages.</p>
 
-        <ul>
-          <li>Functions can modify state.</li>
-          <li>Functions can read and operate on mutable state.</li>
-          <li>Unconstrained side-effects: exceptions, IO, etc</li>
+        <p class="fragment">But Scala doesn't...</p>
+
+        <ul class="fragment">
+          <li>Functions can mutate state.</li>
+          <li>Functions can throw exceptions.</li>
+          <li>Functions can perform IO.</li>
+          <li>Functions can halt the program.</li>
         </ul>
 
         <aside class="notes">
-          pure means statically verified to have no side effects, operate only on IO
+          why? probably because of tradeoffs interfacing with java, java doesn't have pure functions, impossible to guarantee
 
-          why? probably because of tradeoffs interfacing with java, java doesn't have pure, impossible to guarantee
+          pure means statically verified to have no side effects, operate only on IO
 
           could maybe use a D-like system
         </aside>
@@ -549,12 +561,86 @@ java.lang.RuntimeException: terrible idea
       <section>
         <h2>Recursive Functions</h2>
 
-        Recursive Functions.
+        This code isn't safe, why?
+
+        <pre><code class="scala" data-trim data-noescape>
+def recursiveFunction(l:List[Int]): List[Int] = {
+  if(l.isEmpty) Nil
+  else l.head + 1 :: recursiveFunction(l.tail)
+}
+        </code></pre>
+
+        <pre class="fragment"><code class="scala" data-trim data-noescape>
+scala> recursiveFunction((1 to 10000).toList)
+java.lang.StackOverflowError
+  at .recursiveFunction(&lt;console&gt;:12)
+  at .recursiveFunction(&lt;console&gt;:13)
+        </code></pre>
 
         <aside class="notes">
 
+          the jvm doesn't support recursive functions very well:
+          http://softwareengineering.stackexchange.com/questions/272061/why-doesnt-java-have-optimization-for-tail-recursion-at-all
+
+          brian goetz quote:
+          . in jdk classes [...] there are a number of security sensitive methods that rely on counting
+          stack frames between jdk library code and calling code to figure out who's calling them.
+
+          easy to blow the stack
+
+          tailrec
+
+          issues with trampolining in Free monad stacks
+
+          trampolines trade stack for heap
+
+          https://espinhogr.github.io/scala/2015/07/12/trampolines-in-scala.html
+
+          http://blog.richdougherty.com/2009/04/tail-calls-tailrec-and-trampolines.html
+
+          http://eed3si9n.com/learning-scalaz/Stackless+Scala+with+Free+Monads.html
+
+          http://blog.higher-order.com/assets/trampolines.pdf
+
+          haskell doesn't even have a proper call stack
+          https://wiki.haskell.org/Stack_overflow
+
         </aside>
 
+      </section>
+
+      <section>
+        <h2>Recursive Functions</h2>
+
+        <ul>
+          <li>Any recursive function can be re-written as an iterative one. That's what FP languages do.</li>
+          <li>Haskell doesn't even have a proper call stack. Haskell evaluates a chain of thunks!</li>
+          <li>Rewriting only a good idea if and only if you can ignore stack frames.</li>
+          <li>Scala does have @tailrec. Opt-in. Limited.</li>
+        </ul>
+
+      </section>
+
+      <section>
+        <h2>Recursive Functions</h2>
+
+        But generally Scala is toast...
+
+        <ul>
+          <li>The JVM doesn't support tail-call optimization.</li>
+          <li>Stack frames are a crucial implementation detail.</li>
+        </ul>
+
+        <blockquote>in jdk classes [...] there are a number of security sensitive methods that rely on counting
+          stack frames between jdk library code and calling code to figure out who's calling them. - Brian Goetz</blockquote>
+
+      </section>
+
+      <section>
+        <h2>Recursive Functions</h2>
+        It gets worse...
+
+        <div class="fragment">look up "scala trampolines".</div>
       </section>
 
     </section>
@@ -579,8 +665,8 @@ java.lang.RuntimeException: terrible idea
 
   </div>
 </div>
-<script src="lib/js/head.min.js"></script>
-<script src="js/reveal.js"></script>
+<script src="/reveal.js-3.3.0/lib/js/head.min.js"></script>
+<script src="/reveal.js-3.3.0/js/reveal.js"></script>
 <script>
     Reveal.initialize({
         controls: true,
@@ -605,23 +691,23 @@ java.lang.RuntimeException: terrible idea
         //backgroundTransition: SLConfig.deck.background_transition,
         dependencies: [
             // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
-            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: '/reveal.js-3.3.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
 
             // Interpret Markdown in <section> elements
-            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '/reveal.js-3.3.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: '/reveal.js-3.3.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 
             // Syntax highlight for <code> elements
-            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: '/reveal.js-3.3.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 
             // Zoom in and out with Alt+click
-            { src: 'plugin/zoom-js/zoom.js', async: true },
+            { src: '/reveal.js-3.3.0/plugin/zoom-js/zoom.js', async: true },
 
             // Speaker notes
-            { src: 'plugin/notes/notes.js', async: true },
+            { src: '/reveal.js-3.3.0/plugin/notes/notes.js', async: true },
 
             // MathJax
-            { src: 'plugin/math/math.js', async: true }
+            { src: '/reveal.js-3.3.0/plugin/math/math.js', async: true }
         ]
     });
 </script>
