@@ -11,660 +11,126 @@
 <div class="reveal">
   <div class="slides">
     <section>
-      <h2>Elements of Functional Programming in Scala</h2>
+      <h2>Scala Essentials Workshop</h2>
 
-      Mark Kegel
-    </section>
-
-    <section>
-
-    <section>
-      <h2>Prologue</h2>
-    </section>
-
-    <section>
-      <h3>What is Functional Programming?</h3>
-      <div class="fragment replaceafter">Lambdas?</div>
-      <div class="fragment replaceafter">Monads?</div>
-      <div class="fragment replaceafter">Haskell?</div>
-    </section>
-
-    <section>
-      <h3>As viewed by a mathematician...</h3>
-      <div class="fragment current-visible dimafter">
-        <p>Functioning Programming is a
-        <p><b style="color: #cc0000">style</b>
-        <p>of programming that models
-        <p><b style="color: #cc0000">computation</b>
-        <p>as the evaluation of
-        <p><b style="color: #cc0000">mathematical functions.</b>
-      </div>
-
-      <div class="fragment">...by which we mean: FP := λ-calculus.</div>
-
-      <aside class="notes">
-        vs imperative, which is a set of instructions
-        vs OO, which think about objects and messages
-        vs logic, which are a set of goals
-      </aside>
+      <p>April 7th, 2017</p>
+      <p>Brought to you by Scala Enthusiasts</p>
 
     </section>
 
+    <!--
+* course outline, basic schedule
+* course setup
+    * tutorials for the morning
+    * live coding and code walkthroughs for the skeleton app and rest server
+* course goal
+    * familiarity vs proficiency
+    * breadth over depth
+* course divided into three parts
+    * scala intro: core syntax, collections and std libs
+    * basic scala app (hello world)
+    * real scala app (http rest server)
+* selling scala: why learn scala, arguments to help sells others on scala
+* have each TA introduce themselves
+* thank bottlerocket, and any other sponsors
+
+    -->
+
     <section>
-      <h2>Functions all the way down...</h2>
-      <ul>
-        <li class="fragment fade-up">every lambda term <em>t</em> is a function</li>
-        <li class="fragment fade-up">a variable, <em>x</em>, is itself a valid lambda term</li>
-        <li class="fragment fade-up">if <em>t</em> is a lambda term, and <em>x</em> is a variable, then <em>λx.t</em> is a lambda term (called a lambda abstraction);</li>
-        <li class="fragment fade-up">if <em>t</em> and <em>s</em> are lambda terms, then <em>(ts)</em> is a lambda term (called an application).</li>
-      </ul>
-
-      <p class="fragment">Um, shouldn't there be more?</p>
-      <p class="fragment">Nope. That's basically it.</p>
-
-      <aside class="notes">
-        lambda calculus is very simple, only anonymous functions, at the heart of Scala
-        notice: there is no data in λ-calculus
-
-        haskell/scala is built on the (typed) lambda calculus, probably worth a lecture at some point
-      </aside>
+      <h1>Welcome to the Scala Essentials Workshop!</h1>
     </section>
 
-    <section>
-      <h2>λ-calculus limitations</h2>
-
-      <p>FP breaks your brain the first time you use it.</p>
-
-      <p class="fragment dimafter">No named functions.</p>
-      <p class="fragment dimafter">No data.</p>
-      <p class="fragment dimafter">No variables.</p>
-      <p class="fragment dimafter">No control flow.</p>
-      <p class="fragment dimafter">No loops.</p>
-      <p class="fragment dimafter">No effects.</p>
-
-      <p class="fragment">Turing Complete!</p>
-
-      <aside class="notes">
-        kind of zen-like
-
-        all of these concepts can be encoded using the primitives the lambda calculus already has
-
-        Don't I need those things to write a program that does anything!?!
-
-        From https://en.wikipedia.org/wiki/Value-level_programming:
-
-        Lambda calculus-based languages (such as Lisp, ISWIM, and Scheme) are in actual practice value-level languages
-      </aside>
-    </section>
 
     <section>
-
-      <p>Overcoming the λ-calculus limitations has produced a set of core Functional Programming <span class="fragment highlight-red">Concepts</span>. See Haskell, ML, and Scheme.
-
-      <p class="fragment">Functional Concepts can be imitated, leveraged, and/or duplicated more easily than the λ-calculus.
-
-      <p class="fragment">The Elements of Functional Programming are those Concepts applied.
-
-      <aside class="notes">
-        To be productive programmers want higher level notions like variables, control flow, etc.
-
-        Which concepts?
-
-        How faithful?
-
-        Haskell is pure. ML less so. Scala much less so.
-
-        How do the two paradigms compare in concept space?
-      </aside>
-
-    </section>
-
-    <section>
-      <p>Scala is hybrid language, incorporating core Concepts from:
+      <h2>Announcements</h2>
 
       <ul>
-      <li>λ-calculus</li>
-      <li>Functional Programming</li>
-      <li>Imperative Programming</li>
-      <li>Object-Oriented Programming</li>
-      <li>Generic Programming</li>
+        <li>Thank you for coming!</li>
+        <li>We have an aggressive agenda and high expectations.</li>
+        <li>Install: JDK8, GIT, IntelliJ+Scala plugin, SBT.</li>
+        <li>If you haven't installed, find a TA instead of downloading!</li>
       </ul>
 
-      <p class="fragment">Every programming language has to find a balance and compromise on features if it draws from multiple styles.
-
-      <p class="fragment">When necessary, Scala trades-off in favor of Imperative and Object-Oriented Programming Concepts.
-
-      <aside class="notes">
-        compromise is a key word here
-
-        dotty compiler basically has λ-calculus as its core
-
-        desugars back out into jvm primitives in later phases
-
-        DOT and λ-calculus well linked
-
-        scala values seemless interop with java, is costly
-
-        if you can have both OO and FP semantics you'll get both, if not you'll get OO/IP
-      </aside>
-
-    </section>
-
-    <section data-markdown style="background-color: lightgray">
-      <script type="text/template">
-## As different as oil and water?
-
-| Functional                 | Imperative/OO             |
-| ----------                 | ------------------------- |
-| Functions                  | Sub-Routines              |
-| Purity                     | Side-Effects              |
-| Referential Transparency   | Dried Spaghetti           |
-| Binding                    | Assignment                |
-| Values                     | Variables                 |
-| Lazy Evaluation            | Strict Evaluation         |
-| Recursion                  | Loops                     |
-      </script>
     </section>
 
     <section>
-      <h2>Not as different as you think...</h2>
+      <h2>Why Everyone Should Use Scala</h2>
 
-      YOU: <em><br>There are too many differences, FP concepts don't align at all with Imperative code! The gap is too large.</em>
-
-      <p class="fragment">CLAIM: <br>Imperative code is conceptually close to Functional code.</p>
-      <p class="fragment">PROOF: <br>Code without variable re-assignment. Use/write only pure functions.</p>
-
-      <aside class="notes">
-        all about assignment, if you remove assignment, then the core of FP is what happens
-        no mutation, no side-effects (purity), referential transparency restored
-
-        pure = non-side-effecting & ref transparent
-
-        need compiler help for things like pure functions, help marking data immutable
-
-        Only goes so far: still have side-effecting functions like println.
-
-        Works in any language! Java, C++, JavaScript, Obj-C, PHP,...
-
-        copy more of the conceptual elements of Haskell/ML/Scheme, and get a better compiler, and you get a hybrid system!
-      </aside>
-    </section>
-
-    </section>
-
-    <section>
-
-    <section>
-      <h2>Core Concepts of Functional Programming</h2>
-    </section>
-
-    <section>
-      <h2>Core Concepts</h2>
-
-        <!-- Functions --->
-        <div style="background-color: #094564">
-          First-Class Functions<br>  <!-- lambdas and closures -->
-          Higher-Order Functions<br> <!-- covers Function Composition -->
-          Pure Functions<br>         <!-- we know this is a lie -->
-          Recursive Functions<br>    <!-- trampoline, tailrec -->
-          Effect Tracking<br>        <!-- monads -->
-        </div>
-
-        <!-- Data -->
-        <div style="background-color: #442757">
-        Lazy Evaluation<br>
-        Immutable Data<br>
-        Algebraic Data Types<br>
-        Pattern Matching<br>
-        </div>
-
-        <!-- Meta -->
-        <div style="background-color: #1d4e20">
-        Expressive Type Systems<br>
-        Program Soundness<br>
-        </div>
-
-      <aside class="notes">
-        if you want to do FP perfectly, your language needs all of these
-
-        as defined by wikipedia
-
-        (closures vs lambdas)
-        Program soundness -> correctness
-        complex types -> type systems
-
-        all of these items has some first class representation in the language
-      </aside>
-
-    </section>
-
-    <section>
-      We will be exploring each Concept, along with:
       <ul>
-        <li>its Scala representation,</li>
-        <li>its JVM implementation,</li>
-        <li>any inherent limitations,</li>
-        <li>and safe & proper usage.</li>
+        <li>Practically perfect in every way ;-)</li>
+        <li>Full stack language: browser to server to data pipeline</li>
+        <li>Spark is Big Data</li>
+        <li>Seamless zero-cost integration with Java</li>
+        <li>Sound, elegant, concise</li>
+        <li>Hot job market</li>
       </ul>
-    </section>
+
+      <p>We want to help you learn a language we love.</p>
 
     </section>
 
     <section>
+      <h2>Our Goals For You</h2>
 
-      <section>
-        <h2>Part 1</h2>
-        <h2>Concepts around Functions</h2>
-      </section>
+      <ul>
+        <li>Familiarity over Proficiency</li>
+        <li>Breadth over Depth</li>
+      </ul>
 
-      <section>
-        <ul>
-          <li>First-Class Functions</li>  <!-- functions as data -->
-          <li>Higher-Order Functions</li> <!-- covers Function Composition, lambdas/closures -->
-          <li>Pure Functions</li>         <!-- No purity annotations. Not even checked exceptions. -->
-          <li>Recursive Functions</li>    <!-- trampoline, tailrec -->
-          <li>Effect Tracking</li>        <!-- monads -->
-        </ul>
-      </section>
-
-      <section>
-        <h3>First-Class Functions</h3>
-
-        Functions are Data; Convenient Lambdas and Closures
-
-        <pre><code class="scala" data-trim data-noescape>
-// Values and Functions occupy the same namespace
-val two = 2.0
-
-val square: Double => Double = (i) => Math.pow(i, two)
-
-val four = square(two)
-        </code></pre>
-      </section>
-
-      <section>
-        <h3>First-Class Functions</h3>
-
-        Functions are Data; Convenient Lambdas and Closures
-
-        <pre><code class="scala" data-trim data-noescape>
-// Same syntax for Function and Lambda
-val scale = 2.0
-
-val hack: (Double => Double) => Double => Double = f => i => f(i)
-
-// We can declare unnamed functions inline (lambda)
-// and close over values in-scope (closure)
-hack(d => d*scale)(3)
-        </code></pre>
-      </section>
-
-      <section>
-        <h3>First-Class Functions</h3>
-
-        Currying and Partial Application
-
-        <pre><code class="scala" data-trim data-noescape>
-// Consistent Syntax for defining Curried Functions
-val add: Int => Int => Int = i => j => i + j
-
-val five = add(2)(3)
-
-val addTwo = add(2)
-
-val alsoFive = addTwo(3)
-
-// Partial Application is also supported
-val mult = (i:Double,j:Double) => i * j
-
-val timesFour: Double => Double = mult(_, 4)
-        </code></pre>
-        <aside class="notes">
-          Currying is the process of taking a function that accepts N arguments and turning it into a chained series of N functions each taking 1 argument.
-
-          Partial Application just fills in some of the N arguments, smaller arity function but not necessarily arity 1.
-        </aside>
-      </section>
-
-      <section>
-        <h3>First-Class Functions</h3>
-
-        Everything is an Expression
-
-        <pre><code class="scala" data-trim data-noescape>
-// if, for, match are all expressions
-val hexDigit = (x:Int) => if (x >= 10) x + 'A' - 10 else x + '0'
-        </code></pre>
-
-        <aside class="notes">
-          Scala: Everything is an Expression
-
-          Lambda calc: everything is a function (data, control, everything)
-
-          Expressions are a superset of functions
-
-          but regular languages have built in abstraction, statements and expressions, for such things
-
-          yet scala has "everything is an expression"
-        </aside>
-      </section>
-
-      <section>
-        <h3>Higher-Order Functions</h3>
-
-        Functions can have parameters that are themselves Functions; Functions can return Functions
-
-        <pre><code class="scala" data-trim data-noescape>
-// Same syntax for Function and Lambda
-val scale = 2.0
-
-val hack: (Double => Double) => Double => Double = f => i => f(i)
-
-// Both ideas in action
-val hackScale = hack(d => d*scale)
-        </code></pre>
-
-        <aside class="notes">
-          c has function pointers, but no lambda syntax; apple added block syntax for Obj-C to have lambdas
-
-          ruby has lambda syntax (called block syntax) but no true function variables
-          - you have to know the name of the method; hacks to get around
-          - There is a built-in method in Ruby called method. It will return a proc version of the method.
-        </aside>
-      </section>
-
-      <section>
-        <h3>Higher-Order Functions</h3>
-
-        Ludicious Speed
-
-        <pre><code class="scala" data-trim data-noescape>
-// Function Composition
-val compose = (f:Int => Int) => (g: Int => Int) => (x:Int) => g(f(x))
-
-val whack = compose(_ + 2)(_ * 3)
-
-val whacked = whack(9)
-        </code></pre>
-      </section>
-
-      <section>
-        It would seem that Scala supports<br> <span class="fragment highlight-green">First-Class Functions</span> and <span class="fragment highlight-green">Higher-Order Functions</span>...
-      </section>
-
-      <section>
-        <h1>LIES!!</h1>
-        <p class="fragment">Everything you saw was just a very clever lie...</p>
-        <p class="fragment">...designed to make your life easier.</p>
-      </section>
-
-      <section>
-        <h2>Kingdom of the Nouns</h2>
-        <ul>
-          <li class="fragment">Scala has Functions.</li>
-          <li class="fragment">In Scala "everything" is an Object.          <span class="fragment">Scala trades-off in favor of Imperative and Object-Oriented Programming Concepts.</span>
-          </li>
-          <li class="fragment">Therefore: Functions are Objects</li>
-        </ul>
-
-        <p class="fragment">But Functions are Verbs!</p>
-
-        <p class="fragment">No, Functions are the body of an apply Method in an anonymous Sub-Class.</p>
-
-        <aside class="notes">
-          Scala is limited by the fundamental abstractions of the JVM: Objects with Methods.
-
-          Functions are Verbs. On the JVM every Verb must be escorted by a Noun.
-
-          The JVM has static methods but those break OO composibility, so Scala avoids them.
-        </aside>
-
-      </section>
-
-      <section>
-        <h2>What you see...</h2>
-
-        <pre><code class="scala" data-trim data-noescape>
-val pow = (i:Double,j:Double) => Math.pow(i, j)
-
-// What you get...
-val pow = new Function2[Double,Double,Double] {
-  def apply(i:Double,j:Double) = Math.pow(i, j)
-}
-        </code></pre>
-        <aside class="notes">
-          changes as part of scala 2.12 since should be able to use java 8 lambda abstractions
-
-          http://blog.takipi.com/compiling-lambda-expressions-scala-vs-java-8/
-
-          Function0 to 22
-          Tuple0 to 22
-          Product0 to 22
-        </aside>
-      </section>
-
-      <section>
-        <h2>Limitations</h2>
-        Functions != Methods
-
-        <pre><code class="scala" data-trim data-noescape>
-// Only Methods can have type parameters.
-// Or implicit parameters.
-def foo[T](a:T)(implicit ev:Show[T]) = ...
-
-// Can convert a method to a function
-val fooString = foo[String](_)
-
-// Can kind of work around
-class anonfunc[T] extends (T => String) {
-  def apply(x:T)/*(implicit i:Int)*/ = x.toString.substring(0,4)
-}
-
-val f = new anonfunc[String]
-assert(f("generic") == "gene") // put gene back in the generic!
-        </code></pre>
-        <aside class="notes">
-          we can't write our compose function as a function! it has to be a method
-
-          will be getting implicit function types, but will inherit another path
-          http://www.scala-lang.org/blog/2016/12/07/implicit-function-types.html
-
-          http://stackoverflow.com/questions/2554531/how-can-i-define-an-anonymous-generic-scala-function
-          http://jim-mcbeath.blogspot.com/2009/05/scala-functions-vs-methods.html
-          https://thesocietea.org/2016/12/core-functional-programming-concepts/
-          http://stackoverflow.com/questions/9147129/creating-new-generic-object-with-wildcard
-        </aside>
-      </section>
-
-      <section>
-        <h2>Limitations</h2>
-
-        <pre><code class="scala" data-trim data-noescape>
-val f1 = (i:Int) => i + 1
-val f2 = (i:Int) => i + 1
-
-assert(f1 == f2)   // left to the reader
-        </code></pre>
-        <aside class="notes">
-        </aside>
-      </section>
-
-      <section>
-        <h2>What happens if a Function throws?</h2>
-        <pre><code class="scala" data-trim data-noescape>
-val ft = (i:Int) => throw new RuntimeException("terrible idea")
-        </code></pre>
-
-        <p>What does the stacktrace look like?</p>
-
-        <pre><code class="scala" data-trim data-noescape>
-scala> ft(2)
-java.lang.RuntimeException: terrible idea
-  at $anonfun$1.apply(&lt;console&gt;:11)
-  at $anonfun$1.apply(&lt;console&gt;:11)
-  ... 42 elided
-        </code></pre>
-
-        <p class="fragment">Best Practice: Never throw in Functions</p>
-
-      </section>
-
-      <section>
-        <h2>Pure Functions</h2>
-
-        A Function is said to be pure if and only if:
-
-        <ul>
-          <li>its output depends only on the input, and</li>
-          <li>there are no observable side-effects from evaluating the function.</li>
-        </ul>
-
-      </section>
-
-      <section>
-        <h2>Pure Functions</h2>
-
-        <p>You can have Pure Functions in Imperative languages.</p>
-
-        <p class="fragment">But Scala doesn't...</p>
-
-        <ul class="fragment">
-          <li>Functions can mutate state.</li>
-          <li>Functions can throw exceptions.</li>
-          <li>Functions can perform IO.</li>
-          <li>Functions can halt the program.</li>
-        </ul>
-
-        <aside class="notes">
-          why? probably because of tradeoffs interfacing with java, java doesn't have pure functions, impossible to guarantee
-
-          pure means statically verified to have no side effects, operate only on IO
-
-          could maybe use a D-like system
-        </aside>
-
-      </section>
-
-      <section>
-        <h2>Effect Tracking</h2>
-
-        Effect Tracking makes explicit the effects of a Function.
-
-        <p>Scala does not have Effect Tracking and actually eliminates checked exceptions, which are a form of Effect Tracking.</p>
-
-        <aside class="notes">
-
-        </aside>
-
-      </section>
-
-      <section>
-        <h2>Recursive Functions</h2>
-
-        This code isn't safe, why?
-
-        <pre><code class="scala" data-trim data-noescape>
-def recursiveFunction(l:List[Int]): List[Int] = {
-  if(l.isEmpty) Nil
-  else l.head + 1 :: recursiveFunction(l.tail)
-}
-        </code></pre>
-
-        <pre class="fragment"><code class="scala" data-trim data-noescape>
-scala> recursiveFunction((1 to 10000).toList)
-java.lang.StackOverflowError
-  at .recursiveFunction(&lt;console&gt;:12)
-  at .recursiveFunction(&lt;console&gt;:13)
-        </code></pre>
-
-        <aside class="notes">
-
-          the jvm doesn't support recursive functions very well:
-          http://softwareengineering.stackexchange.com/questions/272061/why-doesnt-java-have-optimization-for-tail-recursion-at-all
-
-          brian goetz quote:
-          . in jdk classes [...] there are a number of security sensitive methods that rely on counting
-          stack frames between jdk library code and calling code to figure out who's calling them.
-
-          easy to blow the stack
-
-          tailrec
-
-          issues with trampolining in Free monad stacks
-
-          trampolines trade stack for heap
-
-          https://espinhogr.github.io/scala/2015/07/12/trampolines-in-scala.html
-
-          http://blog.richdougherty.com/2009/04/tail-calls-tailrec-and-trampolines.html
-
-          http://eed3si9n.com/learning-scalaz/Stackless+Scala+with+Free+Monads.html
-
-          http://blog.higher-order.com/assets/trampolines.pdf
-
-          haskell doesn't even have a proper call stack
-          https://wiki.haskell.org/Stack_overflow
-
-        </aside>
-
-      </section>
-
-      <section>
-        <h2>Recursive Functions</h2>
-
-        <ul>
-          <li>Any recursive function can be re-written as an iterative one. That's what FP languages do.</li>
-          <li>Haskell doesn't even have a proper call stack. Haskell evaluates a chain of thunks!</li>
-          <li>Scala has @tailrec. Enforces the rewrite. Opt-in. Limited.</li>
-          <li>Rewriting is a good idea if and only if you can safely ignore stack frames.</li>
-        </ul>
-
-      </section>
-
-      <section>
-        <h2>Recursive Functions</h2>
-
-        But generally Scala is toast...
-
-        <ul>
-          <li>The JVM doesn't support tail-call optimization.</li>
-          <li>Stack frames are a crucial implementation detail.</li>
-        </ul>
-
-        <blockquote>in jdk classes [...] there are a number of security sensitive methods that rely on counting
-          stack frames between jdk library code and calling code to figure out who's calling them. - Brian Goetz</blockquote>
-
-      </section>
-
-      <section>
-        <h2>Recursive Functions</h2>
-        It gets worse...
-
-        <div class="fragment">look up "scala trampolines".</div>
-      </section>
+      <p>Can't learn everything today but can learn what to Google.</p>
 
     </section>
 
     <section>
+      <h2>Schedule/Agenda</h2>
 
-      <section>
-        <h2>Part 2</h2>
-        <h2>Concepts around Data</h2>
+      <ul>
+        <li>9:00am Course Introduction</li>
+        <li>9:15am Core Syntax</li>
+        <li>10:30am Collections &amp; Standard Library</li>
+        <li>11:30am App Anatomy</li>
+        <li>12:00am LUNCH</li>
+        <li>13:00am App Anatomy (continued)</li>
+        <li>13:30am REST Server walkthrough</li>
+        <li>15:00am Play time!</li>
+        <li>17:00am Wrap up</li>
+      </ul>
 
-        Coming soon!
-      </section>
+      <p>We'll take breaks between major sections.</p>
 
     </section>
 
     <section>
+      <h2>Organization</h2>
 
-      <section>
-        <h2>Part 3</h2>
-        <h2>Concepts around Programs</h2>
+      <ul>
+        <li>Course is hands-on: please code along with us!</li>
+        <li>Course uses free tutorials and other free resources.</li>
+        <li>Assistance is available when you get stuck.</li>
+        <li>Direct questions to TAs</li>
+      </ul>
 
-        Coming soon!
-      </section>
+    </section>
 
+    <section>
+      <h2>Volunteers</h2>
+
+      <ul>
+        <li>Bryan Kahlig</li>
+        <li>Bill Goldsworthy</li>
+        <li>John McNulty</li>
+        <li>Jim O’Flaherty</li>
+        <li>Henry Katz</li>
+        <li>Khankap Mounarath</li>
+        <li>Jacob Barber</li>
+        <li>Casey Lucas</li>
+        <li>Mark Kegel</li>
+      </ul>
+
+    </section>
+
+    <section>
+      <h1>On with the show!</h1>
     </section>
 
   </div>
